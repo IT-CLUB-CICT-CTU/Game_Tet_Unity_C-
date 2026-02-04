@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "979137529758",
+    "project_id": "tet-rankings",
+    "storage_bucket": "tet-rankings.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:979137529758:android:19d7574744a3030b4b388f",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.Myproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1B1wuKsJo5HfhP-c7o1No6sAlBXLeCVY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
