@@ -15,6 +15,7 @@ TagManager:
   - TallBarrier
   - Bullet
   - VehicleMove
+  - SettingInGame
   layers:
   - Default
   - TransparentFX

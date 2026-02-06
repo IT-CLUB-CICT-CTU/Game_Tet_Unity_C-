@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 [System.Serializable]
 public class MyRankInfo
@@ -21,7 +22,7 @@ public class FirebaseManager : MonoBehaviour
     public static FirebaseManager Instance;
 
     // ================= CONFIG =================
-    public const int APP_VERSION = 3;   // 🔥 version hiện tại của game
+    public const int APP_VERSION = 3;
 
     // ================= UI =================
     [Header("UI")]
@@ -39,8 +40,8 @@ public class FirebaseManager : MonoBehaviour
 
     bool isLoading = false;
     bool isVersionValid = true;
-    
-    //Guide
+
+    // Guide
     public GuideManager guideManager;
 
     // ================= UNITY =================
@@ -49,9 +50,7 @@ public class FirebaseManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
-        else Destroy(gameObject);
     }
 
     void Start()
@@ -64,6 +63,7 @@ public class FirebaseManager : MonoBehaviour
     {
         isLoading = loading;
         submitButton.interactable = !loading && isVersionValid;
+
         if (!string.IsNullOrEmpty(message))
             statusText.text = message;
     }
@@ -171,15 +171,51 @@ public class FirebaseManager : MonoBehaviour
             });
     }
 
+    // ================= NAME VALIDATION =================
+    bool ValidateName(string name, out string error)
+    {
+        error = "";
+
+        // Dài quá
+        if (name.Length > 20)
+        {
+            error = "NAME MUST NOT EXCEED 20 CHARACTERS";
+            return false;
+        }
+
+        // Phải bắt đầu B + 7 số
+        if (!Regex.IsMatch(name, @"^B\d{7}"))
+        {
+            error = "INVALID STUDENT ID";
+            return false;
+        }
+
+        // Phải có dấu _
+        if (name.Length <= 8 || name[8] != '_')
+        {
+            error = "NAME MUST FOLLOW THE FORMAT: MSSV_username";
+            return false;
+        }
+
+        return true;
+    }
+
     // ================= SUBMIT NAME =================
     public void SubmitName()
     {
         if (isLoading || !isVersionValid) return;
 
         string playerName = nameInput.text.Trim();
+
         if (string.IsNullOrEmpty(playerName))
         {
             statusText.text = "NAME REQUIRED";
+            return;
+        }
+
+        if (!ValidateName(playerName, out string error))
+        {
+            statusText.text = error;
             return;
         }
 
@@ -240,9 +276,7 @@ public class FirebaseManager : MonoBehaviour
             }
 
             if (guideManager != null && guideManager.stepIndex == 0)
-            {
                 guideManager.NextStep();
-            }
 
             namePlayer.text = playerName;
             board.SetActive(false);
@@ -261,7 +295,6 @@ public class FirebaseManager : MonoBehaviour
                 { "score", FieldValue.Increment(delta) },
                 { "updatedAt", FieldValue.ServerTimestamp }
             });
-        // ❌ version cũ sẽ bị Firestore Rules chặn
     }
 
     // ================= LEADERBOARD =================
@@ -308,6 +341,7 @@ public class FirebaseManager : MonoBehaviour
             rank = higherSnap.Count + 1
         });
     }
+
     // ================= SAVE HIGH SCORE =================
     public void SaveHighScore(int newScore)
     {
@@ -322,16 +356,14 @@ public class FirebaseManager : MonoBehaviour
 
             int oldScore = (int)task.Result.GetValue<long>("score");
 
-            // 🔒 chỉ cho ghi nếu cao hơn
             if (newScore <= oldScore)
                 return;
 
             doc.UpdateAsync(new Dictionary<string, object>
-        {
-            { "score", newScore },
-            { "updatedAt", FieldValue.ServerTimestamp }
-        });
-            // ❌ version cũ sẽ bị Firestore Rules chặn ở đây
+            {
+                { "score", newScore },
+                { "updatedAt", FieldValue.ServerTimestamp }
+            });
         });
     }
 }

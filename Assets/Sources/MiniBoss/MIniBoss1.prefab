@@ -55,18 +55,24 @@ MonoBehaviour:
   stopPoint: {fileID: 0}
   currentPoint: 0
   enterSpeed: 40
-  zOffset: 40
+  zOffset: 55
   followSmooth: 7
   bullet: {fileID: 7888334612171070407, guid: 5261118945dc3ed449ceddfffeeb63c5, type: 3}
   firePoint: {fileID: 1367453760139276177}
   bulletSpeed: 60
-  coolDown: 2
+  coolDown: 2.5
   doubleShot: 0
   spreadAngle: 10
   aimOffset: {x: 0, y: 0, z: 15}
   state: 0
   shootAudio: {fileID: 2553004741539196077}
-  shootClip: {fileID: 8300000, guid: 106c65f39aff33349b5c7781118e6bc0, type: 3}
+  listClip:
+  - {fileID: 8300000, guid: 51b1652662eac334ea845b5b941b95d1, type: 3}
+  - {fileID: 8300000, guid: dd103eede2cd4844cacc9ba4f3681ee8, type: 3}
+  - {fileID: 8300000, guid: d1e1872a85a44fb47b90ad67e02471b9, type: 3}
+  - {fileID: 8300000, guid: 7ea51413e8bcbe6438f2c26ee638939e, type: 3}
+  - {fileID: 8300000, guid: bbe08251b84d78f46be16786ed295cf9, type: 3}
+  - {fileID: 8300000, guid: 3125bd4f44811274ea3ad6b525eacba3, type: 3}
 --- !u!65 &247322919347634200
 BoxCollider:
   m_ObjectHideFlags: 0

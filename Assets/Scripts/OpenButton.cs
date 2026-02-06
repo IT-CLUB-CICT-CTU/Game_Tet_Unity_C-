@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class OpenButton : MonoBehaviour
 {
+    public static OpenButton Instance;
     public List<GameObject> objectsToDisable = new List<GameObject>();
     public List<GameObject> objectsToEnable = new List<GameObject>();
     public bool isPause = false;
+
+    void Awake()
+    {
+        Instance = this;
+    }
 
     public void Open()
     {
@@ -24,8 +30,7 @@ public class OpenButton : MonoBehaviour
         {
             return;
         }
-
-        if (isPause) return;
+        isPause = true;
         Time.timeScale = 0f;
     }
 
@@ -40,5 +45,6 @@ public class OpenButton : MonoBehaviour
             obj.SetActive(false);
         }
         Time.timeScale = 1f;
+        isPause = false;
     }
 }

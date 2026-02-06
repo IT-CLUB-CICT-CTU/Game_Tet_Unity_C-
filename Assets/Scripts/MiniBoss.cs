@@ -33,7 +33,7 @@ public class MiniBoss : MonoBehaviour
 
     [Header("Sound")]
     public AudioSource shootAudio;
-    public AudioClip shootClip;
+    public AudioClip[] listClip;
 
     void Start()
     {
@@ -126,10 +126,8 @@ public class MiniBoss : MonoBehaviour
     void Shoot()
     {
         // 🔊 âm thanh bắn
-        if (shootAudio != null && shootClip != null)
-        {
-            shootAudio.PlayOneShot(shootClip);
-        }
+        int clipIndex = Random.Range(0, listClip.Length);
+        shootAudio?.PlayOneShot(listClip[clipIndex]);
 
         Vector3 predictedPos = GetPredictedPlayerPosition();
 

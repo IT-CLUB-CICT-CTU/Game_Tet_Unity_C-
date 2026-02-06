@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using System.Collections;
 using System.Collections.Generic;
 
 public class LeaderBoard : MonoBehaviour
@@ -14,12 +15,25 @@ public class LeaderBoard : MonoBehaviour
 
     void OnEnable()
     {
+        StartCoroutine(WaitAndLoad());
+    }
+
+    IEnumerator WaitAndLoad()
+    {
+        // Đợi FirebaseManager tồn tại
+        while (FirebaseManager.Instance == null)
+            yield return null;
+
+        // Đợi Firebase sign-in xong
+        while (!FirebaseManager.Instance.IsReady)
+            yield return null;
+
         Load();
     }
 
-    public void Load()
+    void Load()
     {
-        FirebaseManager.Instance.LoadLeaderBoard( 
+        FirebaseManager.Instance.LoadLeaderBoard(
             limit,
             OnTopLoaded,
             OnMyLoaded
@@ -28,6 +42,9 @@ public class LeaderBoard : MonoBehaviour
 
     void OnTopLoaded(List<RankData> list)
     {
+        if (content == null || itemPrefab == null)
+            return;
+
         foreach (Transform c in content)
             Destroy(c.gameObject);
 
@@ -36,14 +53,20 @@ public class LeaderBoard : MonoBehaviour
             GameObject item = Instantiate(itemPrefab, content);
             TMP_Text[] t = item.GetComponentsInChildren<TMP_Text>();
 
-            t[0].text = (i + 1).ToString();
-            t[1].text = list[i].name;
-            t[2].text = list[i].score.ToString();
+            if (t.Length >= 3)
+            {
+                t[0].text = (i + 1).ToString();
+                t[1].text = list[i].name;
+                t[2].text = list[i].score.ToString();
+            }
         }
     }
 
     void OnMyLoaded(MyRankInfo info)
     {
+        if (myRank == null || myName == null || myScore == null)
+            return;
+
         myRank.text = info.rank.ToString();
         myName.text = info.name;
         myScore.text = info.score.ToString();

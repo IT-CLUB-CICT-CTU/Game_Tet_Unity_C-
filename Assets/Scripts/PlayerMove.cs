@@ -69,6 +69,7 @@ public class PlayerMove : MonoBehaviour
 
     private bool lastPauseState = false;
     private bool ignoreInputThisFrame = false;
+    public OpenButton openButton;
 
     void Start()
     {
@@ -80,7 +81,7 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
-        bool isPaused = Setting.Instance != null && Setting.Instance.isPause;
+        bool isPaused = openButton != null && openButton.isPause;
 
         if (lastPauseState && !isPaused)
         {

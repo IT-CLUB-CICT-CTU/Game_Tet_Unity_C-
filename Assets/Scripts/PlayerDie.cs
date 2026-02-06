@@ -51,6 +51,7 @@ public class PlayerDie : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip protectClip;
     public AudioClip hitClip;
+    public AudioClip[] memeList;
 
     void Start()
     {
@@ -72,12 +73,27 @@ public class PlayerDie : MonoBehaviour
     }
 
     // ================= DIE =================
+    void RandomClip()
+    {
+        if (memeList.Length == 0) return;
+        int index = Random.Range(0, memeList.Length);
+        StartCoroutine(WaitHit(index));
+    }
+
+    IEnumerator WaitHit(int index)
+    {
+        yield return new WaitForSeconds(0.5f);
+        audioSource?.PlayOneShot(memeList[index]);
+    }
+
     public void TakeDamage(int damage)
     {
         if (isDead || isProtect || isWin) return;
 
         // Phát âm thanh khi bị trúng đòn
         audioSource?.PlayOneShot(hitClip);
+
+        RandomClip();
 
         currentHearts -= damage;
         if (currentHearts <= 0)

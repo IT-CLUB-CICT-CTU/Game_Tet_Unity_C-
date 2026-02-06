@@ -36,15 +36,7 @@ public class GameManager : MonoBehaviour
     // ================= INIT =================
     void Awake()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
         Instance = this;
-        DontDestroyOnLoad(gameObject);
-
         // 🔒 Init SecureInt đúng lifecycle Unity
         score.Init(0);
     }
